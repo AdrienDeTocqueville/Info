@@ -8,7 +8,8 @@ public class TP4
 	{
 		System.out.println(maxDistance( new double[][]{{0,0},{0,1},{1,1},{1,0}} ));
 		
-//		int[] array = generate(10);
+		int[] array = {1, 6, 5, 7, 12, 56, 10};
+		System.out.println(partitionnement(array, 0, array.length-1, 3));
 //
 //		long startTime = System.nanoTime();
 //		
@@ -56,6 +57,29 @@ public class TP4
 	/// 2.0.1.3
 	
 	
+//	public static int[] quicksort(int[] array)
+//	{
+//		
+//	}
+	
+	public static int partitionnement(int[] array, int debut, int fin, int pivot)
+	{
+		swap(array, pivot, fin);
+		
+		int j = debut;
+		for (int i = debut ; i  < fin ; ++i)
+		{
+			if (array[i] < array[fin])
+				swap(array, i, j++);
+		}
+		
+		swap(array, fin, j);
+		System.out.println(Arrays.toString(array));
+		return j;
+	}
+	
+	
+	
 	/// 4.2.1
 	public static double maxDistance(double[][] polygone)
 	{
@@ -94,5 +118,12 @@ public class TP4
 			tab[i] = rand.nextInt();
 		
 		return tab;
+	}
+	
+	private static void swap(int[] array, int a, int b)
+	{
+		int temp = array[a];
+		array[a] = array[b];
+		array[b] = temp;
 	}
 }
