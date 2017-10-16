@@ -6,25 +6,41 @@ public class TP4
 {
 	public static void main(String[] args)
 	{
-		System.out.println(maxDistance( new double[][]{{0,0},{0,1},{1,1},{1,0}} ));
+		Random rand = new Random(7);
+
+		System.out.print("\nr = [");
+		for (int i = 100 ; i <= 10000 ; i+=500)
+		{
+			int[] array = generate(rand, i);
+	
+			long startTime = System.nanoTime();
+				triRapide(array, 0, array.length-1);
+			long estimatedTime = System.nanoTime() - startTime;
+	
+			System.out.print(estimatedTime + ", ");
+		}
 		
-		int[] array = {1, 6, 5, 7, 12, 56, 10};
-		System.out.println(partitionnement(array, 0, array.length-1, 3));
-//
-//		long startTime = System.nanoTime();
-//		
-//			int[] res = triFusion(array, 0, array.length);
-//			
-//		long estimatedTime = System.nanoTime() - startTime;
-//
-//		System.out.println(Arrays.toString(res));
-//		System.out.println("Time: " + estimatedTime + " ns");
+		rand = new Random(7);
+		System.out.print("\nf = [");
+		for (int i = 100 ; i <= 10000 ; i+=500)
+		{
+			int[] array = generate(rand, i);
+	
+			long startTime = System.nanoTime();
+				triFusion(array, 0, array.length);
+			long estimatedTime = System.nanoTime() - startTime;
+
+			System.out.print(estimatedTime + ", ");
+		}
 	}
 	
 	/// 2.0.1.3
 	public static int[] triFusion(int[] tableau, int debut, int fin)
 	{
 		int taille = fin-debut;
+		
+		if (taille == 0)
+			System.out.println("ca va pas");
 		
 		if (taille == 1)
 			return new int[]{tableau[debut]};
@@ -61,7 +77,30 @@ public class TP4
 //	{
 //		
 //	}
-	
+
+	public static int[] triRapide(int[] array, int debut, int fin)
+	{
+		int[] sorted = new int[array.length];
+		System.arraycopy(array, 0, sorted, 0, array.length);
+		
+		quickSort(sorted, debut, fin);
+		
+		return sorted;
+	}
+
+	public static void quickSort(int[] array, int debut, int fin)
+	{
+		int pivot;
+		
+		if (debut < fin)
+		{
+			pivot = (int) Math.floor((debut+fin) / 2);
+			pivot = partitionnement(array, debut, fin, pivot);
+			quickSort(array, debut, pivot-1);
+			quickSort(array, pivot+1, fin);
+		}
+	}
+
 	public static int partitionnement(int[] array, int debut, int fin, int pivot)
 	{
 		swap(array, pivot, fin);
@@ -69,12 +108,11 @@ public class TP4
 		int j = debut;
 		for (int i = debut ; i  < fin ; ++i)
 		{
-			if (array[i] < array[fin])
+			if (array[i] <= array[fin])
 				swap(array, i, j++);
 		}
 		
 		swap(array, fin, j);
-		System.out.println(Arrays.toString(array));
 		return j;
 	}
 	
@@ -89,9 +127,7 @@ public class TP4
 		for (int i = 0 ; i < n-1 ; ++i)
 		{
 			for (int j = i+2 ; j < Math.min(i+n-1, n) ; ++j)
-			{				
-				System.out.println(i + " : " + j);
-				
+			{
 				double a1 = polygone[i][0], b1 = polygone[i][1];
 				double a2 = polygone[j][0], b2 = polygone[j][1];
 				
@@ -109,10 +145,9 @@ public class TP4
 	
 
 	
-	private static int [] generate(int size)
+	private static int [] generate(Random rand, int size)
 	{
 		int [] tab = new int[size];
-		Random rand = new Random();
 		
 		for(int i =0; i< tab.length; i++)
 			tab[i] = rand.nextInt();
