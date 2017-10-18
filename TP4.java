@@ -6,31 +6,39 @@ public class TP4
 {
 	public static void main(String[] args)
 	{
-		Random rand = new Random(7);
-
-		System.out.print("\nr = [");
-		for (int i = 100 ; i <= 10000 ; i+=500)
+		long[][] resultats = new long[2][10];
+		long startTime;
+		
+		for (int i = 100 ; i <= 1000 ; i+=100)
 		{
-			int[] array = generate(rand, i);
+			int[] array = generate(i);
 	
-			long startTime = System.nanoTime();
+			startTime = System.nanoTime();
+				triFusion(array, 0, array.length);
+			resultats[0][i/100 -1] = System.nanoTime() - startTime;
+	
+			startTime = System.nanoTime();
 				triRapide(array, 0, array.length-1);
-			long estimatedTime = System.nanoTime() - startTime;
-	
-			System.out.print(estimatedTime + ", ");
+			resultats[1][i/100 -1] = System.nanoTime() - startTime;
 		}
 		
-		rand = new Random(7);
+		// Pour afficher avec MatLab
 		System.out.print("\nf = [");
-		for (int i = 100 ; i <= 10000 ; i+=500)
+		for (int i = 0 ; i < resultats[0].length ; i++)
 		{
-			int[] array = generate(rand, i);
-	
-			long startTime = System.nanoTime();
-				triFusion(array, 0, array.length);
-			long estimatedTime = System.nanoTime() - startTime;
-
-			System.out.print(estimatedTime + ", ");
+			if (i < resultats[0].length-1)
+				System.out.print(resultats[0][i] + ", ");
+			else
+				System.out.print(resultats[0][i] + "];");
+		}
+		
+		System.out.print("\nr = [");
+		for (int i = 0 ; i < resultats[1].length ; i++)
+		{
+			if (i < resultats[1].length-1)
+				System.out.print(resultats[1][i] + ", ");
+			else
+				System.out.print(resultats[1][i] + "];");
 		}
 	}
 	
@@ -145,8 +153,10 @@ public class TP4
 	
 
 	
-	private static int [] generate(Random rand, int size)
+	private static int [] generate(int size)
 	{
+		Random rand = new Random();
+		
 		int [] tab = new int[size];
 		
 		for(int i =0; i< tab.length; i++)
