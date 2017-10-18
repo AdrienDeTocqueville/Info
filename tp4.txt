@@ -1,9 +1,0 @@
-2.0.1)
-1. Oui. la fusion se fait toujours dans le meme ordre donc ca donne le meme tableau 
-
-2. Complexité: n.log(n)
-n a cause des iterations de fusion
-log(n) a cause de la recursion
-
-4.2)
-2. Complexité: n^2
