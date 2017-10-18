@@ -130,7 +130,7 @@ public class TP4
 	public static double maxDistance(double[][] polygone)
 	{
 		int n = polygone.length;
-		double diagMax = Double.MIN_VALUE;
+		double diagMax2 = Double.MIN_VALUE;
 
 		for (int i = 0 ; i < n-1 ; ++i)
 		{
@@ -139,14 +139,14 @@ public class TP4
 				double a1 = polygone[i][0], b1 = polygone[i][1];
 				double a2 = polygone[j][0], b2 = polygone[j][1];
 				
-				double diag = Math.sqrt((a1-a2)*(a1-a2) + (b1-b2)*(b1-b2));
+				double diag2 = (a1-a2)*(a1-a2) + (b1-b2)*(b1-b2);
 				
-				if (diag > diagMax)
-					diagMax = diag;
+				if (diag2 > diagMax2)
+					diagMax2 = diag2;
 			}
 		}
 		
-		return diagMax;
+		return Math.sqrt(diagMax2);
 	}
 	/// 4.2.1
 	
