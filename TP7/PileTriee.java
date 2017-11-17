@@ -1,28 +1,22 @@
 
-public class PileTriee<T extends Number & Comparable<? super T>> extends Pile<T>
+public class PileTriee extends Pile<Double>
 {
 	public PileTriee()
 	{
 		super();
 	}
 
-	protected PileTriee(T value, Pile<T> next)
+	protected PileTriee(Double value, Pile<Double> next)
 	{
 		super(value, next);
 	}
 
-	public void push(T value)
+	public void push(Double value)
 	{
-		if (next == null)
-			next = new PileTriee<T>(value, next);
+		if (next == null || next.data >= value)
+			next = new PileTriee(value, next);
 
 		else
-		{
-			if (next.data.compareTo(value) > 0)
-				next = new PileTriee<T>(value, next);
-
-			else
-				next.push(value);
-		}
+			next.push(value);
 	}
 }
