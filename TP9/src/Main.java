@@ -1,7 +1,5 @@
 public class Main
 {
-
-	static String text = "";
 	public static void main(String[] args)
 	{
 		ArbreBinaire e = new ArbreBinaire("e", new ArbreBinaire("g"), new ArbreBinaire("h"));
