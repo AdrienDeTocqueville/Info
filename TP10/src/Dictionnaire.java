@@ -1,20 +1,17 @@
-import java.awt.List;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Random;
 
 public class Dictionnaire
 {
 	Path path;
-	ArrayList<String> words = new ArrayList<String>();
 	
-	Dictionnaire(String _fileName)
+	Arbre root = new Arbre('_');
+	
+	public Dictionnaire(String _fileName)
 	{
 		path = Paths.get(_fileName);
 		
@@ -24,7 +21,7 @@ public class Dictionnaire
 			String line = null;
 			
 			while ((line = reader.readLine()) != null)
-				words.add(line);
+				root.add(line);
 		}
 		
 		catch (IOException x)
@@ -33,22 +30,13 @@ public class Dictionnaire
 		}
 	}
 	
-	String get()
+	public String get()
 	{
-		Random rand = new Random();
-		int index = rand.nextInt(words.size());
-		
-		return words.get(index);
+		return Arbre.getString(root);
 	}
 	
-	boolean find(String _word)
-	{
-		for (int i = 0; i < words.size(); i++)
-		{
-			if (words.get(i).equals(_word))
-				return true;
-		}
-		
-		return false;
+	public boolean find(String _word)
+	{		
+		return root.contains(_word);
 	}
 }

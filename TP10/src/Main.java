@@ -5,7 +5,7 @@ public class Main
 	static Scanner sc = new Scanner(System.in);
 
 	public static void main(String[] args)
-	{		
+	{
 		Dictionnaire dico = new Dictionnaire("dico.txt");
 		
 		String motus = dico.get(), guess;
@@ -46,18 +46,20 @@ public class Main
 		for (int i = 0; i < _word.length(); i++)
 		{
 			String regex = "(.*)" + _guess.charAt(i) + "(.*)";
-			//System.out.println(regex);
+
 			if (_word.matches(regex))
 			{
-				if (_guess.charAt(i) == _word.charAt(i))
+				if (_guess.charAt(i) == _word.charAt(i)) {
 					res.append("o");
-				else
+				} else {
 					res.append("-");
+				}
 			}
-			else
+			else {
 				res.append("x");
+			}
+			
 		}
-//			res.charAt(i) = (_word.charAt(i) == _guess.charAt(i)) ? 
 		
 		return res.toString();
 	}
