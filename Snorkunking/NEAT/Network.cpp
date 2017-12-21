@@ -27,59 +27,60 @@ float Neuron::compute()
 
 Network::Network(Genome* _genome)
 {
-	// Ce constructeur doit etre modifie pour prendre en argument une chaine de caractere
-	// et charger le genome a partir de celle ci
-	// Cette fonction est la derniere du fichier Genome.cpp
+	// Ce constructeur doit être modifié pour prendre en argument une chaine de caractères
+	// et charger le genome à partir de celle ci
+	// Ce chargement est fait dans la dernière fonction du fichier Genome.cpp
 
-    // Chaque gene represente une liaison entre deux neurones identifies par des numeros
-    // On cree un dictionnaire qui a un numero associe un neurone
-    // les numeros entre 0 et Genome::pool->inputSize-1 representent les neurones de la premiere couche
-    // les numeros entre Genome::pool->inputSize et Genome::pool->outputSize-1 representent les neurones de la derniere couche
+    // Chaque gène représente une liaison entre deux neurones identifiés par des numéros
+    // On crée un dictionnaire qui à un numéro associe un neurone
+    // les numéros entre 0 et Genome::pool->inputSize-1 représentent les neurones de la première couche
+    // les numéros entre Genome::pool->inputSize et Genome::pool->outputSize-1 représentent les neurones de la dernière couche
 
-    map<unsigned, Neuron*> neurons; // (unsigned est un entier non signe, donc positif, mais ca marcherait aussi avec int)
+    map<unsigned, Neuron*> neurons; // (unsigned est un entier non signé, donc positif, mais ca marcherait aussi en utilisant int)
 
-    // On itere sur tous les genes
-    // Donc sur tous les neurones existants
+    // On itère sur tous les gènes, donc on rencontrera au moins une fois chaque neurone
 
-    // Note: cette boucle est probablement simplifiable en java parceque la memoire est geree automatiquement
+    // Note: cette boucle est probablement simplifiable en java parce que la memoire est gerée automatiquement
     for (const Gene& gene: _genome->genes)
     {
         if (!gene.enabled)
             continue;
 
         auto it = neurons.find(gene.in);
-        if (it == neurons.end())              // Si il n'existe pas encore
-            neurons[gene.in] = new Neuron();  // on le rajoute
+        if (it == neurons.end())              // Si on n'a encore jamais rencontré ce neurone
+            neurons[gene.in] = new Neuron();  // on alloue de la mémoire pour plus tard
 
         it = neurons.find(gene.out);
-        if (it == neurons.end())              // Si il n'existe pas encore
-            neurons[gene.out] = new Neuron(); // on le rajoute
+        if (it == neurons.end())              // Si on n'a encore jamais rencontré ce neurone
+            neurons[gene.out] = new Neuron(); // on alloue de la mémoire pour plus tard
     }
 
-    // Maintenant que le dictionnaire est cree
-    // On remplit les neurones avec les donnees contenues dans les genes
+    // Maintenant que le dictionnaire est initialisé
+    // On remplit les neurones créés avec les données contenues dans les gènes
     for (const Gene& gene: _genome->genes)
     {
         if (!gene.enabled)
             continue;
 
+        // Un gène code un liaison entre les neurones identifiés par gene.in et gene.out
         Neuron* n = neurons[gene.out];
-        n->inputs.push_back(neurons[gene.in]); // On rajoute un neurone d'entree
-        n->weights.push_back(gene.weight);     // et le poids correspondant
+        n->inputs.push_back(neurons[gene.in]);
+        n->weights.push_back(gene.weight);
     }
 
-    // Maintenant que les genes sont traduits sous forme de neurones
-    // On finalise l'organisation du reseau
-    // Chaque neurone est soit sur la couche d'entree, celle de sortie ou une couche intermediaire (dite cachée)
+    // Maintenant que les gènes sont traduits sous forme de neurones
+    // On finalise l'organisation du réseau
+    // Chaque neurone est soit sur la couche d'entrée, sur celle de sortie ou sur une couche intermediaire (dite cachée)
 
-	// Ces deux couches ont des tailles fixes, contrairement a la couche cachée
+	// Ces deux couches ont des tailles fixes, contrairement à la couche cachée
     inputLayer.resize(Genome::pool->inputSize, nullptr);
     outputLayer.resize(Genome::pool->outputSize, nullptr);
 
 	// Les elements de std::map sont des std::pair<unsigned, Neuron*>
 	// Les elements d'une paire sont nommés first et second
 
-	// On itere sur les paires
+	// On itère sur les paires
+	// En fonction de l'index d'un neurone, on le place sur la couche appropriée
     for (auto it(neurons.begin()) ; it != neurons.end() ; ++it)
     {
         unsigned index = it->first;
@@ -119,7 +120,7 @@ vector<float> Network::evaluate(vector<float>& _input)
 
     for (unsigned i(0) ; i < inputLayer.size() ; i++)
     {
-        if (inputLayer[i] != nullptr) // C'est possible qu'un genome n'utilise pas toutes le entrees
+        if (inputLayer[i] != nullptr) // C'est possible qu'un genome n'utilise pas toutes les entrées
             inputLayer[i]->output = _input[i];
     }
 
